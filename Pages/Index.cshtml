@@ -1,0 +1,101 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Example Post Application - Modernized";
+}
+
+<div class="text-center">
+    <h1><!--class="display-4"-->Example Post Application - Modernized</h1>
+    <h3>Welcome to Post [insert Post name]</h3>
+</div>
+
+<div class="grid-container">
+    <div>
+    <div>
+        <label for="ScannerPort">Choose Scanner Port:</label>
+    </div>
+        <select name="ScannerPort" id="ScannerPort">
+            <option id="2DBarcodeScanner" value="2DBarcodeScanner">2D Barcode Scanner</option>
+            <option id="Other" value="Other">Other</option>
+        </select>
+    </div>
+</div>
+
+<form method="post">
+    <fieldset>
+        <div class="grid-container">
+        <!--<legend>Add Customer</legend>-->
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="FirstName">First Name:</label>
+            </div>
+                <input id="FirstName" type="text" name="FirstName" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="MiddleName">Middle Name:</label>
+            </div>
+            <input id="MiddleName" type="text" name="MiddleName" value="" />
+        </div>
+        <div class ="FormDiv">
+            <div class="FormLabel">
+                <label for="LastName">Last Name:</label>
+            </div>
+            <input id="LastName" type="text" name="LastName" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="Sex">Sex:</label>
+            </div>
+            <input id="Sex" type="text" name="Sex" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="PlaceofBirth">Place of Birth:</label>
+            </div>
+            <input id="PlaceofBirth" type="text" name="PlaceofBirth" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="DateofBirth">Date of Birth:</label>
+            </div>
+            <input id="DateofBirth" type="text" name="DateofBirth" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="SocialSecurityNumber">Social Security Number:</label>
+            </div>
+            <input id="SocialSecurityNumber"type="text" name="SocialSecurityNumber" value="" />
+        </div>
+        <div class="FormDiv"></div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="Address">Address:</label>
+            </div>
+            <input id="Address" type="text" name="Address" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="City">City:</label>
+            </div>
+            <input id="City" type="text" name="City" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="State">State:</label>
+            </div>
+            <input id="State" type="text" name="State" value="" />
+        </div>
+        <div class="FormDiv">
+            <div class="FormLabel">
+                <label for="ZipCode">Zip Code:</label>
+            </div>
+            <input id="ZipCode" type="text" name="ZipCode" value="" />
+        </div>
+        <!--<div>
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="submit" />
+        </div>-->
+        </div>
+    </fieldset>
+</form>
