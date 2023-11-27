@@ -4,10 +4,6 @@
 // Write your JavaScript code.
 
 /*document.addEventListener("DOMContentLoaded", function () {
-    // This code runs when the page has fully loaded
-    // You can add your custom JavaScript functionality here
-
-    // Example: Alert the selected USB port when a user changes the selection
     var usbPortDropdown = document.getElementById("ScannerPort");
     usbPortDropdown.addEventListener("change", function () {
         var selectedPort = ScannerPort.value;
@@ -17,11 +13,6 @@
 
 function myFunction(event) {
     if (document.getElementById("ScannerPort").value === "2DBarcodeScanner") {
-        //var barcodeInput = event.key; /*"DS - 11 | 1 | TESTFIRST | TESTMIDDLE | TESTLAST | F | MA |01 /01 / 2000 | 123467890 | 1919 N LYNN ST || ARLINGTON | VA | 22209 ||||||||||||||| TESTEMAIL@GMAIL.COM||| DS 11 B 03 2022 1 | 6=Y, 7 = N || 0 |";*/
-        //console.log(document.getElementById("FirstName").value);
-        //var barcodeInput = document.getElementById("FirstName").value += event.key;
-        //console.log(document.getElementById("FirstName").value);
-
         var barcodeInput = /*"DS - 11 | 1 | TESTFIRST | TESTMIDDLE | TESTLAST | F | MA |01 /01 / 2000 | 123467890 | 1919 N LYNN ST || ARLINGTON | VA | 22209 ||||||||||||||| TESTEMAIL@GMAIL.COM||| DS 11 B 03 2022 1 | 6=Y, 7 = N || 0 |"*/ event.key;
         console.log(event.key);
         var dataArray = barcodeInput.split('|');
