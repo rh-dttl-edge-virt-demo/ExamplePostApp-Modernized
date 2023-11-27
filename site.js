@@ -24,8 +24,7 @@ function myFunction(event) {
 
         var barcodeInput = /*"DS - 11 | 1 | TESTFIRST | TESTMIDDLE | TESTLAST | F | MA |01 /01 / 2000 | 123467890 | 1919 N LYNN ST || ARLINGTON | VA | 22209 ||||||||||||||| TESTEMAIL@GMAIL.COM||| DS 11 B 03 2022 1 | 6=Y, 7 = N || 0 |"*/ event.key;
         console.log(event.key);
-        document.getElementById("FirstName").value = barcodeInput;
-        /*var dataArray = barcodeInput.split('|');
+        var dataArray = barcodeInput.split('|');
         document.getElementById("FirstName").value = dataArray[2];
         document.getElementById("MiddleName").value = dataArray[3];
         document.getElementById("LastName").value = dataArray[4];
@@ -36,7 +35,7 @@ function myFunction(event) {
         document.getElementById("Address").value = dataArray[9];
         document.getElementById("City").value = dataArray[11];
         document.getElementById("State").value = dataArray[12];
-        document.getElementById("ZipCode").value = dataArray[13];*/
+        document.getElementById("ZipCode").value = dataArray[13];
     }
 }
 
