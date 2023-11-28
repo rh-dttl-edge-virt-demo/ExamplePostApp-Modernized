@@ -1,0 +1,181 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!--Title-->
+<div class="text-center">
+    <h1><!--class="display-4"-->Example Post Application - Modernized</h1>
+    <h3>Welcome to Post [insert Post name]</h3>
+</div>
+
+<!--Scanner Port Dropdown-->
+<div class="grid-container">
+    <div>
+        <div>
+            <label for="portSelector">Choose a Scanner Port:</label>
+        </div>
+        <select id="portSelector">
+            <!--<option id="2DBarcodeScanner" value="2DBarcodeScanner">2D Barcode Scanner</option>
+            <option id="Other" value="Other">Other</option>-->
+        </select>
+    </div>
+</div>
+
+<!--Form-->
+<form method="post">
+    <fieldset>
+        <div class="grid-container">
+            <div>
+            <div>
+                <label for="FirstName">First Name:</label>
+            </div>
+            <input id="FirstName" type="text" name="FirstName" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="MiddleName">Middle Name:</label>
+            </div>
+            <input id="MiddleName" type="text" name="MiddleName" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="LastName">Last Name:</label>
+            </div>
+            <input id="LastName" type="text" name="LastName" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="Sex">Sex:</label>
+            </div>
+            <input id="Sex" type="text" name="Sex" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="PlaceofBirth">Place of Birth:</label>
+            </div>
+            <input id="PlaceofBirth" type="text" name="PlaceofBirth" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="DateofBirth">Date of Birth:</label>
+            </div>
+            <input id="DateofBirth" type="text" name="DateofBirth" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="SocialSecurityNumber">Social Security Number:</label>
+            </div>
+            <input id="SocialSecurityNumber" type="text" name="SocialSecurityNumber" value="" />
+            </div>
+            
+            <div></div>
+
+            <div>
+            <div>
+                <label for="Address">Address:</label>
+            </div>
+            <input id="Address" type="text" name="Address" value="" />
+            </div>
+            
+            <div>
+            <div>
+                <label for="City">City:</label>
+            </div>
+            <input id="City" type="text" name="City" value="" />
+            </div>
+            
+            <div>
+            <div>
+                <label for="State">State:</label>
+            </div>
+            <input id="State" type="text" name="State" value="" />
+            </div>
+
+            <div>
+            <div>
+                <label for="ZipCode">Zip Code:</label>
+            </div>
+            <input id="ZipCode" type="text" name="ZipCode" value="" />
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<script>
+    // Javascript code
+
+    // Serial Port Code
+    // Function to populate the serial port dropdown with available ports
+    async function populateSerialPortDropdown() {
+        const portSelector = document.getElementById("portSelector");
+        const ports = await navigator.serial.getPorts();
+
+        ports.forEach(port => {
+            const option = document.createElement("option");
+            option.value = port.serialNumber;
+            option.text = port.serialNumber;
+            portSelector.appendChild(option);
+        });
+    }
+
+    // Event listener for when the user selects a port
+    document.getElementById("portSelector").addEventListener("change", async function () {
+        const selectedPort = this.value;
+        await openSerialPort(selectedPort);
+    });
+
+    // Call the function to populate the dropdown when the page loads
+    document.addEventListener("DOMContentLoaded", populateSerialPortDropdown);
+
+    // Function to open and configure the selected serial port
+    async function openSerialPort(selectedPort) {
+        try {
+            const port = await navigator.serial.requestPort({ serialNumber: selectedPort });
+            await port.open({ baudRate: 9600 });
+
+            // Start reading data from the serial port
+            const reader = port.readable.getReader();
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    break;
+                }
+                
+                // Process the received data
+                processData(value);
+            }
+        } catch (error) {
+            console.error("Error opening or reading serial port:", error);
+        }
+    }
+    
+    // Function to process received data
+    function processData(data) {
+        const decodedData = new TextDecoder().decode(data);
+        console.log("Received data:", decodedData);
+
+        const dataArray = decodedData.split('|');
+
+        // Populate the form fields with the data
+        document.getElementById("FirstName").value = dataArray[2];
+        document.getElementById("MiddleName").value = dataArray[3];
+        document.getElementById("LastName").value = dataArray[4];
+        document.getElementById("Sex").value = dataArray[5];
+        document.getElementById("PlaceofBirth").value = dataArray[6];
+        document.getElementById("DateofBirth").value = dataArray[7];
+        document.getElementById("SocialSecurityNumber").value = dataArray[8];
+        document.getElementById("Address").value = dataArray[9];
+        document.getElementById("City").value = dataArray[11];
+        document.getElementById("State").value = dataArray[12];
+        document.getElementById("ZipCode").value = dataArray[13];
+    }
+
+</script>
