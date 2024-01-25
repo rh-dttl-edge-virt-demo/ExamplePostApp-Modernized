@@ -1,0 +1,273 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!--Title-->
+<div class="text-center">
+    <h1><!--class="display-4"-->Example Post Application - Modernized</h1>
+    <h3>Welcome to Post [insert Post name]</h3>
+</div>
+
+<!--Scanner Port Dropdown-->
+<div class="grid-container">
+    <div>
+        <div>
+            <button id="connectButton" class="btn">Connect to Device</button>
+            <!--<label for="portSelector">Choose a Scanner Port:</label>-->
+        </div>
+        <!--<select id="portSelector">
+            <option id="2DBarcodeScanner" value="2DBarcodeScanner">2D Barcode Scanner</option>
+            <option id="Other" value="Other">Other</option>
+        </select>-->
+    </div>
+</div>
+
+<!--Form-->
+<form method="post">
+    <fieldset>
+        <div class="grid-container">
+            <div>
+                <div>
+                    <label for="FirstName">First Name:</label>
+                </div>
+                <input id="FirstName" type="text" name="FirstName" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="MiddleName">Middle Name:</label>
+                </div>
+                <input id="MiddleName" type="text" name="MiddleName" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="LastName">Last Name:</label>
+                </div>
+                <input id="LastName" type="text" name="LastName" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="Sex">Sex:</label>
+                </div>
+                <input id="Sex" type="text" name="Sex" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="PlaceofBirth">Place of Birth:</label>
+                </div>
+                <input id="PlaceofBirth" type="text" name="PlaceofBirth" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="DateofBirth">Date of Birth:</label>
+                </div>
+                <input id="DateofBirth" type="text" name="DateofBirth" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="SocialSecurityNumber">Social Security Number:</label>
+                </div>
+                <input id="SocialSecurityNumber" type="text" name="SocialSecurityNumber" value="" />
+            </div>
+
+            <div></div>
+
+            <div>
+                <div>
+                    <label for="Address">Address:</label>
+                </div>
+                <input id="Address" type="text" name="Address" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="City">City:</label>
+                </div>
+                <input id="City" type="text" name="City" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="State">State:</label>
+                </div>
+                <input id="State" type="text" name="State" value="" />
+            </div>
+
+            <div>
+                <div>
+                    <label for="ZipCode">Zip Code:</label>
+                </div>
+                <input id="ZipCode" type="text" name="ZipCode" value="" />
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<script>
+    // Javascript code
+
+    // Serial port code 01/23
+    // Connect to the port
+    async function connectToSerialPort() {
+        try {
+            // Request access to the port
+            const port = await navigator.serial.requestPort();
+            const portInfo = await port.getInfo();
+
+            // Log the port object
+            console.log("Serial port object:", port);
+            console.log("Additional port info:", portInfo);
+
+            // Open the port
+            await port.open({ baudRate: 9600 });
+
+            // Read data from the port
+            const reader = port.readable.getReader();
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    break;
+                }
+                const decodedData = new TextDecoder().decode(value);
+                console.log("Received data:", decodedData);
+
+                // Process the received data and populate the form fields
+                processData(decodedData);
+            }
+
+            // Close the port
+            await port.close();
+            console.log("Serial port closed.");
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    // Function to process received data and populate the form fields
+    function processData(decodedData) {
+        // Split data based on the delimiter '|'
+        const dataArray = decodedData.split('|');
+
+        // Populate the form fields with the data
+        document.getElementById("FirstName").value = dataArray[2];
+        document.getElementById("MiddleName").value = dataArray[3];
+        document.getElementById("LastName").value = dataArray[4];
+        document.getElementById("Sex").value = dataArray[5];
+        document.getElementById("PlaceofBirth").value = dataArray[6];
+        document.getElementById("DateofBirth").value = dataArray[7];
+        document.getElementById("SocialSecurityNumber").value = dataArray[8];
+        document.getElementById("Address").value = dataArray[9];
+        document.getElementById("City").value = dataArray[11];
+        document.getElementById("State").value = dataArray[12];
+        document.getElementById("ZipCode").value = dataArray[13];
+    }
+
+    // Add an event listener to the connect button
+    document.getElementById("connectButton").addEventListener("click", () => {
+        connectToSerialPort();
+    });
+
+    /*async function populateSerialPortDropdown() {
+        try {
+            const portSelector = document.getElementById("portSelector");
+
+            portSelector.innerHTML = "";
+
+            const ports = await navigator.serial.getPorts();
+
+            if (ports.length === 0) {
+                // No ports found
+                const option = document.createElement("option");
+                option.value = "";
+                option.text = "No COM ports available";
+                portSelector.appendChild(option);
+            } else {
+                for (const port of ports) {
+                    const option = document.createElement("option");
+                    const portInfo = await port.getInfo();
+                    console.log("Port Info:", portInfo);
+                    option.value = portInfo.usbProductId || portInfo.serialNumber || portInfo.deviceName || portInfo.pnpId;
+                    option.text = option.value; // Use the value as the text
+                    portSelector.appendChild(option);
+                }
+            }
+            console.log("Dropdown populated with available ports:", ports.map(port => port.name));
+        } catch (error) {
+            console.error("Error getting available ports:", error);
+        }
+    }
+
+    document.getElementById("portSelector").addEventListener("change", async function () {
+        const selectedPort = this.value;
+        console.log("Selected Port:", selectedPort); // Log the selected port
+        await openSerialPort(selectedPort);
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        await populateSerialPortDropdown();
+    });
+
+    async function openSerialPort(selectedPort) {
+        try {
+            console.log(`Opening serial port: ${selectedPort}`);
+
+            // Request access to the selected serial port
+            const port = await navigator.serial.requestPort({ path: selectedPort });
+
+            console.log(`Serial port ${selectedPort} requested successfully.`);
+
+            // Open the port with the desired settings (e.g., baud rate)
+            await port.open({ baudRate: 9600 });
+
+            console.log(`Serial port ${selectedPort} opened successfully.`);
+
+            // Start reading data from the serial port
+            const reader = port.readable.getReader();
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    break;
+                }
+
+                // Process the received data
+                processData(value);
+            }
+
+            // Close the port when done
+            await port.close();
+            console.log(`Serial port ${selectedPort} closed.`);
+        } catch (error) {
+            console.error(`Error opening or reading serial port ${selectedPort}:`, error);
+        }
+    }
+
+    // Function to process received data
+    function processData(data) {
+        const decodedData = new TextDecoder().decode(data);
+        console.log("Received data:", decodedData);
+
+        // Split data based on the delimiter (| in this case)
+        const dataArray = decodedData.split('|');
+
+        // Populate the form fields with the data
+        document.getElementById("FirstName").value = dataArray[2];
+        document.getElementById("MiddleName").value = dataArray[3];
+        document.getElementById("LastName").value = dataArray[4];
+        document.getElementById("Sex").value = dataArray[5];
+        document.getElementById("PlaceofBirth").value = dataArray[6];
+        document.getElementById("DateofBirth").value = dataArray[7];
+        document.getElementById("SocialSecurityNumber").value = dataArray[8];
+        document.getElementById("Address").value = dataArray[9];
+        document.getElementById("City").value = dataArray[11];
+        document.getElementById("State").value = dataArray[12];
+        document.getElementById("ZipCode").value = dataArray[13];
+    }*/
+
+</script>
