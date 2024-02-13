@@ -10,26 +10,21 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  docker:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Publish
-      run: dotnet publish ExamplePostApp-Modernized.csproj -c Release -o release --nologo
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: Application_Artifact
-        path: /home/runner/work/ExamplePostApp-Modernized/ExamplePostApp-Modernized/release
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: false
+          tags: user/app:latest
