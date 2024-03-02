@@ -33,18 +33,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Generate a Docker image tag
-        id: gen_tags
-        run: |
-          if [[ $GITHUB_REF == 'refs/tags/v'* ]]; then
-            TAGS='["lindseyvolk/examplepostapp-modernized:latest","lindseyvolk/examplepostapp-modernized:'${GITHUB_REF/refs\/tags\//}'"]'
-          else
-            TAGS='["lindseyvolk/examplepostapp-modernized:latest"]'
-          fi
-          echo "::set-output name=tags::$TAGS"
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            lindseyvolk/examplepostapp-modernized
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
       -
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          push: true
-          tags: ${{ fromJson(steps.gen_tags.outputs.tags) }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
