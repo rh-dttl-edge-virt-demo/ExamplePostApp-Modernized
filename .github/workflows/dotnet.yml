@@ -6,6 +6,10 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+    paths-ignore:
+      - 'charts/**'
   pull_request:
     branches: [ "main" ]
 
@@ -28,9 +32,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      -
+        name: Generate a Docker image tag
+        id: gen_tags
+        run: |
+          if [[ $GITHUB_REF == 'refs/tags/v'* ]]; then
+            TAGS='["lindseyvolk/examplepostapp-modernized:latest","lindseyvolk/examplepostapp-modernized:'${GITHUB_REF/refs\/tags\//}'"]'
+          else
+            TAGS='["lindseyvolk/examplepostapp-modernized:latest"]'
+          fi
+          echo "::set-output name=tags::$TAGS"
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
       -
         name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: lindseyvolk/examplepostapp-modernized:latest
+          tags: ${{ fromJson(steps.gen_tags.outputs.tags) }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
