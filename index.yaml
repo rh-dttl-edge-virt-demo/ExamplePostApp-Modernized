@@ -3,6 +3,17 @@ entries:
   modern-post-application:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2024-03-08T19:07:45.513785381Z"
+    description: A helm chart to deploy the Modern Post Application as an containerized
+      Deployment
+    digest: e86d24725784ce5ca5b04743d34f9e52b7fdbe61feafc240db61eafbddae48f9
+    name: modern-post-application
+    type: application
+    urls:
+    - https://github.com/rh-dttl-edge-virt-demo/ExamplePostApp-Modernized/releases/download/modern-post-application-0.1.2/modern-post-application-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2024-03-08T18:53:25.953872746Z"
     description: A helm chart to deploy the Modern Post Application as an containerized
       Deployment
@@ -12,4 +23,4 @@ entries:
     urls:
     - https://github.com/rh-dttl-edge-virt-demo/ExamplePostApp-Modernized/releases/download/modern-post-application-0.1.1/modern-post-application-0.1.1.tgz
     version: 0.1.1
-generated: "2024-03-08T18:53:25.953882123Z"
+generated: "2024-03-08T19:07:45.513794218Z"
