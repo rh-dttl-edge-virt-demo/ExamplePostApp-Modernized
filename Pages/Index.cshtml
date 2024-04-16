@@ -124,8 +124,19 @@
             console.log("Serial port object:", port);
             console.log("Additional port info:", portInfo);
 
+            // Specify options for opening the serial port
+            const options = {
+                baudRate: 9600,
+                dataBits: 8,
+                stopBits: 1,
+                parity: "none",
+                bufferSize: 255,
+                flowControl: "none"
+            };
+
             // Open the port
-            await port.open({ baudRate: 9600 });
+            //await port.open({ baudRate: 9600 });
+            await port.open(options);
 
             // Read data from the port
             const reader = port.readable.getReader();
