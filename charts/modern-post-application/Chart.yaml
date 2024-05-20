@@ -3,5 +3,5 @@ apiVersion: v2
 name: modern-post-application
 description: A helm chart to deploy the Modern Post Application as an containerized Deployment
 type: application
-version: 0.1.5
-appVersion: 0.1.4
+version: 0.1.6
+appVersion: 0.1.6
